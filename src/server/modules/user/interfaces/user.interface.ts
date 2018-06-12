@@ -22,4 +22,5 @@ export interface IUser extends Document {
     username: string;
     displayName: string;
   };
+  refUrl: string;
 }

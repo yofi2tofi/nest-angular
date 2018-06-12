@@ -4,7 +4,7 @@ import { use } from 'passport';
 import { Strategy } from 'passport-local';
 
 import { IUser } from '../../user/interfaces/user.interface';
-import { generateHashedPassword, generateSalt } from '../../../utilities/encryption';
+import { generateHashedPassword, generateSalt, generateHashedRefUrl } from '../../../utilities/encryption';
 import { MESSAGES, USER_MODEL_TOKEN } from '../../../server.constants';
 
 @Injectable()
@@ -32,7 +32,8 @@ export class LocalStrategy {
             email,
             salt,
             hashedPassword: generateHashedPassword(salt, password)
-          }
+          },
+          refUrl: generateHashedRefUrl(salt, email)
         });
 
         await user.save();

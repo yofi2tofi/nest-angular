@@ -24,5 +24,6 @@ export const UserSchema: Schema = new Schema({
     id: String,
     username: String,
     displayName: String
-  }
+  },
+  refUrl: String
 });

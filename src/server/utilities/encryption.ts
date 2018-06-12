@@ -8,7 +8,12 @@ const generateHashedPassword: (salt: string, password: string) => string = (salt
   return createHmac('sha256', salt).update(password).digest('hex');
 };
 
+const generateHashedRefUrl: (salt: string, email: string) => string = (salt, email) => {
+  return createHmac('sha256', salt).update(email).digest('hex');
+};
+
 export {
   generateSalt,
-  generateHashedPassword
+  generateHashedPassword,
+  generateHashedRefUrl
 };

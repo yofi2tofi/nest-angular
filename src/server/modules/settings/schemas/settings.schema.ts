@@ -6,6 +6,7 @@ export const SettingsSchema: Schema = new Schema({
     required: true
   },
   refUrl: {
-    type: String
+    type: String,
+    required: true
   }
 });
