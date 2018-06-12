@@ -8,6 +8,7 @@ export const DB_CONNECTION_TOKEN: string = 'DbConnectionToken';
 export const DB_SESSION_TOKEN: string = 'DbSessionToken';
 export const SERVER_CONFIG_TOKEN: string = 'ServerConfigToken';
 export const USER_MODEL_TOKEN: string = 'UserModelToken';
+export const SETTINGS_MODEL_TOKEN: string = 'SettingsModelToken';
 export const FACEBOOK_CONFIG_TOKEN: string = 'FacebookConfigToken';
 export const TWITTER_CONFIG_TOKEN: string = 'TwitterConfigToken';
 export const GOOGLE_CONFIG_TOKEN: string = 'GoogleConfigToken';
