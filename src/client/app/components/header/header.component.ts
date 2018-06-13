@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 interface ISection {
   title: string;
@@ -24,7 +25,12 @@ export class HeaderComponent implements OnInit {
     ]
   };
 
-  constructor() { }
+  constructor(
+    private readonly httpClient: HttpClient
+  ) {
+    httpClient.get('api/payment')
+      .subscribe((res) => console.log(res));
+  }
 
   ngOnInit() {
   }

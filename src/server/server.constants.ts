@@ -13,6 +13,8 @@ export const FACEBOOK_CONFIG_TOKEN: string = 'FacebookConfigToken';
 export const TWITTER_CONFIG_TOKEN: string = 'TwitterConfigToken';
 export const GOOGLE_CONFIG_TOKEN: string = 'GoogleConfigToken';
 
+export const COINPAYMENTS_PAYMENT_TOKEN: string = 'CoinpaymentsPaymentToken';
+
 export const MESSAGES = {
   UNAUTHORIZED_EMAIL_IN_USE: 'The email already exists',
   UNAUTHORIZED_INVALID_PASSWORD: 'Invalid password',

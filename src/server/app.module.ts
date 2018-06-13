@@ -7,7 +7,9 @@ import { DatabaseModule } from './modules/database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { AngularUniversalModule } from './modules/angular-universal/angular-universal.module';
-import { GraphqlModule } from './modules/graphql/graphql.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+
+// import { GraphqlModule } from './modules/graphql/graphql.module';
 
 @Module({
   imports: [
@@ -15,6 +17,7 @@ import { GraphqlModule } from './modules/graphql/graphql.module';
     AuthModule,
     UserModule,
     SettingsModule,
+    PaymentsModule,
     // GraphqlModule,
     AngularUniversalModule.forRoot()
   ],
