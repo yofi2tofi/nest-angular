@@ -25,5 +25,12 @@ export const UserSchema: Schema = new Schema({
     username: String,
     displayName: String
   },
-  refUrl: String
+  system: {
+    refUrl: String,
+    resetUrl: {
+      type: String,
+      default: null
+    },
+    resetUrlCreated: Number
+  }
 });

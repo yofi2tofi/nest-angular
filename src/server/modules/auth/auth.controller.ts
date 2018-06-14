@@ -67,6 +67,16 @@ export class AuthController {
     return await this.authService.createToken(req.user);
   }
 
+  @Post('reset')
+  async resetPasswordLink(@Req() req: Request): Promise<string> {
+    return await this.authService.getResetUrl(req.body.email);
+  }
+
+  @Post('reset/:id')
+  resetPassword(@Req() req: Request): boolean {
+    return true;
+  }
+
   @Get('authorized')
   public async authorized() {
     console.log('Authorized route...');

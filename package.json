@@ -117,6 +117,7 @@
     "joi": "13.1.2",
     "jsonwebtoken": "8.1.1",
     "mongoose": "4.13.9",
+    "nodemailer": "^4.6.6",
     "passport": "0.4.0",
     "passport-facebook-token": "3.3.0",
     "passport-google-plus-token": "2.1.0",

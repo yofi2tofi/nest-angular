@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotFoundException, RequestTimeoutException, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { use } from 'passport';
 import { Strategy } from 'passport-local';
@@ -34,7 +34,9 @@ export class LocalStrategy {
             salt,
             hashedPassword: generateHashedPassword(salt, password)
           },
-          refUrl: generateHashedRefUrl(salt, email)
+          system: {
+            refUrl: generateHashedRefUrl(salt, email)
+          }
         });
 
         await user.save();
@@ -83,12 +85,46 @@ export class LocalStrategy {
           return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
         }
 
-        this.userModel.update(
+        await this.userModel.update(
           { _id: user._id },
-          { local: { $set: { hashedPassword: generateHashedPassword(user.local.salt, password)}}}
-        );
+          { $set: { 'local.hashedPassword': generateHashedPassword(user.local.salt, password) }}
+        ).exec();
 
         done(null, user);
+      } catch (error) {
+        done(error, false);
+      }
+    }));
+
+    use('local-reset', new Strategy({
+      usernameField: 'hash',
+      passwordField: 'password',
+    }, async (hash: string, password: string, done: Function) => {
+      try {
+        const user: IUser = await this.userModel.findOne({ 'system.resetUrl': hash });
+
+        if (!user) {
+          return done(new NotFoundException(), false);
+        }
+
+        if (user.system.resetUrlCreated > (+new Date() + 1000 * 60 * 60) ) {
+          return done(new RequestTimeoutException(MESSAGES.LIFETIME_LINK_OUT), false);
+        }
+
+        const salt: string = generateSalt();
+        await this.userModel.update(
+          { _id: user._id },
+          {
+            $set: {
+              'local.salt': salt,
+              'local.hashedPassword': generateHashedPassword(salt, password),
+              'system.resetUrl': null,
+              'system.resetUrlCreated': null
+            }
+          }
+        ).exec();
+
+        done(null, true);
       } catch (error) {
         done(error, false);
       }

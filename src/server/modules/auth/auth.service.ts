@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { sign } from 'jsonwebtoken';
 import { get, post, Response } from 'request';
@@ -8,13 +8,16 @@ import {
   USER_MODEL_TOKEN,
   FACEBOOK_CONFIG_TOKEN,
   TWITTER_CONFIG_TOKEN,
-  GOOGLE_CONFIG_TOKEN
+  GOOGLE_CONFIG_TOKEN,
+  MESSAGES
 } from '../../server.constants';
 import { IUser } from '../user/interfaces/user.interface';
 import { IToken } from './interfaces/token.interface';
 import { IFacebookConfig } from './interfaces/facebook-config.interface';
 import { ITwitterConfig } from './interfaces/twitter-config.interface';
 import { IGoogleConfig } from './interfaces/google-config.interface';
+import { generateSalt, generateHashedPassword, generateHashedResetUrl } from '../../utilities/encryption';
+import { EmailerService } from '../emailer/emailer.service';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +27,8 @@ export class AuthService {
     @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
     @Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig,
     @Inject(TWITTER_CONFIG_TOKEN) private readonly twitterConfig: ITwitterConfig,
-    @Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig
+    @Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig,
+    private readonly emailerService: EmailerService
   ) {
     this.url = `${SERVER_CONFIG.httpProtocol}://${SERVER_CONFIG.domain}:${SERVER_CONFIG.httpPort}`;
   }
@@ -241,6 +245,30 @@ export class AuthService {
         });
       });
     });
+  }
+
+  async getResetUrl(email: string): Promise<any> {
+    const user: IUser = await this.userModel.findOne({ 'local.email': email });
+
+    if (!user) {
+      return new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_EMAIL);
+    }
+
+    const { _id, local: { salt, hashedPassword }} = user;
+    const url = generateHashedResetUrl(generateSalt(), _id.toString());
+
+    await this.userModel.update(
+      { _id },
+      {
+        $set: {
+          'local.hashedPassword': generateHashedPassword(user.local.salt, hashedPassword),
+          'system.resetUrl': url,
+          'system.resetUrlCreated': +new Date()
+        }
+      }
+    ).exec();
+
+    // this.emailerService.sendResetMail(email, url);
   }
 
   private parseTwitterResponse(response: string): {[key: string]: string | boolean} {

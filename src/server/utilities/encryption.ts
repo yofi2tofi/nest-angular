@@ -12,8 +12,15 @@ const generateHashedRefUrl: (salt: string, email: string) => string = (salt, ema
   return createHmac('sha256', salt).update(email).digest('hex');
 };
 
+const generateHashedResetUrl: (salt: string, id: string) => string = (salt, id) => {
+  const date = (+new Date()).toString();
+  const hmac = createHmac('sha256', salt).update(id).digest('hex');
+  return createHmac('sha256', hmac).update(date).digest('hex');
+};
+
 export {
   generateSalt,
   generateHashedPassword,
-  generateHashedRefUrl
+  generateHashedRefUrl,
+  generateHashedResetUrl
 };

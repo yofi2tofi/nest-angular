@@ -22,5 +22,9 @@ export interface IUser extends Document {
     username: string;
     displayName: string;
   };
-  refUrl: string;
+  system: {
+    refUrl: string;
+    resetUrl: string;
+    resetUrlCreated?: number;
+  };
 }

@@ -14,13 +14,18 @@ import { TwitterStrategy } from './passport/twitter.strategy';
 import { GoogleStrategy } from './passport/google-plus.strategy';
 
 import { UserModule } from '../user/user.module';
+import { EmailerModule } from '../emailer/emailer.module';
+
 import { authProviders } from './auth.providers';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { bodyValidatorMiddleware } from './middlewares/body-validator.middleware';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    UserModule,
+    EmailerModule
+  ],
   providers: [
     ...authProviders,
     AuthService,
@@ -55,6 +60,12 @@ export class AuthModule implements NestModule {
         authenticate('local-change', { session: false })
       ])
       .forRoutes('api/auth/local/change-password');
+
+    consumer
+      .apply([
+        authenticate('local-reset', { session: false })
+      ])
+      .forRoutes('api/auth/reset/:id');
 
     consumer
       .apply(authenticate('facebook', { session: false }))
