@@ -17,6 +17,11 @@ export class AuthController {
     return await this.authService.createToken(req.user);
   }
 
+  @Post('local/change-password')
+  async requestJsonWebTokenAfterLocalChangePass(@Req() req: Request): Promise<IToken> {
+    return await this.authService.createToken(req.user);
+  }
+
   @Get('facebook/uri')
   async requestFacebookRedirectUrl(): Promise<{redirect_uri: string}> {
     return await this.authService.requestFacebookRedirectUri();

@@ -23,6 +23,7 @@ export class RecipesComponent implements OnInit {
   passwordFormControl = new FormControl('', [
     Validators.required
   ]);
+  changePasswordFormControl = new FormControl('');
 
   constructor(
     private readonly recipesService: RecipesService,
@@ -82,6 +83,14 @@ export class RecipesComponent implements OnInit {
 
   signIn() {
     this.authService.signIn(this.emailFormControl.value, this.passwordFormControl.value);
+  }
+
+  changePassword() {
+    this.authService.changePass(
+      this.emailFormControl.value,
+      this.passwordFormControl.value,
+      this.changePasswordFormControl.value
+    );
   }
 
   getProtected() {

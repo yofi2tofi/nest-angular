@@ -27,6 +27,16 @@ export class AuthService {
     });
   }
 
+  changePass(email: string, password: string, oldPassword: string): void {
+    this.httpClient.post(`api/auth/local/change-password`, {
+      email,
+      password,
+      oldPassword
+    }).subscribe((token: IToken) => {
+      localStorage.setItem('token', token.token);
+    });
+  }
+
   requestFacebookRedirectUri(): Observable<any> {
     return this.httpClient.get('api/auth/facebook/uri');
   }

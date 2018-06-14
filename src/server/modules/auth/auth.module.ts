@@ -50,6 +50,13 @@ export class AuthModule implements NestModule {
       .forRoutes('api/auth/local/signin');
 
     consumer
+      .apply([
+        bodyValidatorMiddleware,
+        authenticate('local-change', { session: false })
+      ])
+      .forRoutes('api/auth/local/change-password');
+
+    consumer
       .apply(authenticate('facebook', { session: false }))
       .forRoutes('api/auth/facebook/token');
 

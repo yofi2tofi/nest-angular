@@ -11,10 +11,14 @@
       <mat-form-field class="example-full-width">
         <input matInput placeholder="Password" [formControl]="passwordFormControl">
       </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="OldPassword" [formControl]="changePasswordFormControl">
+      </mat-form-field>
     </form>
 
     <button mat-button (click)="signUp()">Sign Up</button>
     <button mat-button (click)="signIn()">Sign In</button>
+    <button mat-button (click)="changePassword()">Change Pass</button>
     <button mat-button (click)="getProtected()">Get Protected</button>
     <button mat-button (click)="facebookLogin()">Facebook Login</button>
     <button mat-button (click)="twitterLogin()">Twitter Login</button>

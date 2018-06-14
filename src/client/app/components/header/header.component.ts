@@ -27,10 +27,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private readonly httpClient: HttpClient
-  ) {
-    httpClient.get('api/payment')
-      .subscribe((res) => console.log(res));
-  }
+  ) {}
 
   ngOnInit() {
   }

@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { use } from 'passport';
 import { Strategy } from 'passport-local';
+import { Request } from 'express';
 
 import { IUser } from '../../user/interfaces/user.interface';
 import { generateHashedPassword, generateSalt, generateHashedRefUrl } from '../../../utilities/encryption';
@@ -58,6 +59,34 @@ export class LocalStrategy {
         if (generateHashedPassword(user.local.salt, password) !== user.local.hashedPassword) {
           return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
         }
+
+        done(null, user);
+      } catch (error) {
+        done(error, false);
+      }
+    }));
+
+    use('local-change', new Strategy({
+      usernameField: 'email',
+      passwordField: 'password',
+      passReqToCallback: true
+    } , async (req: Request, email: string, password: string, done: Function) => {
+      try {
+        const oldPassword = req.body.oldPassword;
+        const user: IUser = await this.userModel.findOne({ 'local.email': email });
+
+        if (!user) {
+          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_EMAIL), false);
+        }
+
+        if (generateHashedPassword(user.local.salt, oldPassword) !== user.local.hashedPassword) {
+          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
+        }
+
+        this.userModel.update(
+          { _id: user._id },
+          { local: { $set: { hashedPassword: generateHashedPassword(user.local.salt, password)}}}
+        );
 
         done(null, user);
       } catch (error) {
