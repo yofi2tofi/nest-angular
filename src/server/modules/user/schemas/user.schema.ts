@@ -32,5 +32,12 @@ export const UserSchema: Schema = new Schema({
       default: null
     },
     resetUrlCreated: Number
+  },
+  refSystem: {
+    refferals: {
+      type: Array,
+      default: []
+    },
+    refferer: String
   }
 });

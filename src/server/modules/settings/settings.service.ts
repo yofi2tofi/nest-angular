@@ -14,6 +14,9 @@ export class SettingsService {
     this.init();
   }
 
+  /**
+   * Определяет как будет указан урл для рефераллов
+   */
   async init() {
     const settings: ISettings  = await this.settingsModel.findOne();
 
@@ -37,10 +40,14 @@ export class SettingsService {
     const settings: ISettings = await this.settingsModel.findOne();
 
     if (query[settings.refUrl]) {
-      const user: IUser = await this.userModel.findOne({ refUrl: query[settings.refUrl] });
-      if (user) {
-        const { _id } = user;
-        session.refferer = _id;
+      try {
+        const user: IUser = await this.userModel.findOne({ 'system.refUrl': query[settings.refUrl] });
+        if (user) {
+          const { _id } = user;
+          session.refferer = _id;
+        }
+      } catch (error) {
+        console.log('settings', error);
       }
     }
 

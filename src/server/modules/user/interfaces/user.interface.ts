@@ -27,4 +27,8 @@ export interface IUser extends Document {
     resetUrl: string;
     resetUrlCreated?: number;
   };
+  refSystem: {
+    refferals: number[],
+    refferer: string
+  };
 }

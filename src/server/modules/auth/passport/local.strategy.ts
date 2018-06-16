@@ -19,12 +19,15 @@ export class LocalStrategy {
   private init(): void {
     use('local-signup', new Strategy({
       usernameField: 'email',
-      passwordField: 'password'
-    }, async (email: string, password: string, done: Function) => {
+      passwordField: 'password',
+      passReqToCallback: true
+    }, async (req: any, email: string, password: string, done: Function) => {
       try {
         if (await this.userModel.findOne({ 'local.email': email })) {
           return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_EMAIL_IN_USE), false);
         }
+
+        const refferer: string = req.session.refferer;
 
         const salt: string = generateSalt();
         const user: IUser = new this.userModel({
@@ -36,8 +39,20 @@ export class LocalStrategy {
           },
           system: {
             refUrl: generateHashedRefUrl(salt, email)
+          },
+          refSystem: {
+            refferer
           }
         });
+
+        if (refferer) {
+          await this.userModel.update(
+            { _id: refferer },
+            { $push: {
+              'refSystem.refferals': user._id
+            }}
+          ).exec();
+        }
 
         await user.save();
 
