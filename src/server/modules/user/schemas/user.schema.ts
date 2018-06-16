@@ -9,7 +9,11 @@ export const UserSchema: Schema = new Schema({
   local: {
     email: {type: String, lowercase: true, unique: true, sparse: true},
     salt: String,
-    hashedPassword: String
+    hashedPassword: String,
+    roleId: {
+      type: Number,
+      default: 0
+    }
   },
   google: {
     id: String,
@@ -39,5 +43,19 @@ export const UserSchema: Schema = new Schema({
       default: []
     },
     refferer: String
+  },
+  balance: {
+    current: {
+      type: Number,
+      default: 0
+    },
+    income: {
+      type: Number,
+      default: 0
+    },
+    outcome: {
+      type: Number,
+      default: 0
+    }
   }
 });

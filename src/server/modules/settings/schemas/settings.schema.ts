@@ -8,5 +8,9 @@ export const SettingsSchema: Schema = new Schema({
   refUrl: {
     type: String,
     required: true
+  },
+  currencies: {
+    usd: Number,
+    btc: Number
   }
 });

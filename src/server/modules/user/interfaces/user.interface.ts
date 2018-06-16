@@ -6,7 +6,7 @@ export interface IUser extends Document {
     email: string;
     salt: string;
     hashedPassword: string;
-    roles: string[];
+    roleId: number;
   };
   google: {
     id: string;
@@ -30,5 +30,10 @@ export interface IUser extends Document {
   refSystem: {
     refferals: number[],
     refferer: string
+  };
+  balance: {
+    current: number,
+    income: number,
+    outcome: number
   };
 }

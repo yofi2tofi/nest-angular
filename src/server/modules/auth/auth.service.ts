@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   async createToken(user: IUser): Promise<IToken> {
-    const expiresIn: string = '48h';
+    const expiresIn: string = '12h';
     const token: string = sign({
       sub: user.id
     }, SERVER_CONFIG.jwtSecret, {expiresIn});
