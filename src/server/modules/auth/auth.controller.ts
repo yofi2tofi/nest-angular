@@ -1,7 +1,8 @@
-import { Controller, Post, Get, Req } from '@nestjs/common';
+import { Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
+
 import { AuthService } from './auth.service';
 import { IToken } from './interfaces/token.interface';
-import { Request } from 'express';
 
 @Controller('api/auth')
 export class AuthController {

@@ -139,7 +139,7 @@ export class LocalStrategy {
           }
         ).exec();
 
-        done(null, true);
+        done(null, user);
       } catch (error) {
         done(error, false);
       }

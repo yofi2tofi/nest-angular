@@ -9,7 +9,10 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { AngularUniversalModule } from './modules/angular-universal/angular-universal.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { EmailerModule } from './modules/emailer/emailer.module';
+import { OwnershipModule } from './modules/ownership/ownership.module';
 // import { GraphqlModule } from './modules/graphql/graphql.module';
+
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { EmailerModule } from './modules/emailer/emailer.module';
     // GraphqlModule,
     AngularUniversalModule.forRoot()
   ],
-  controllers: []
+  controllers: [],
+  providers: [
+    AuthGuard
+  ]
 })
 export class ApplicationModule {}

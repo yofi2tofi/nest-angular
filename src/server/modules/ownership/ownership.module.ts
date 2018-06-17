@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 
+import { OwnershipController } from './ownership.controller';
 import { OwnershipProviders } from './ownership.providers';
 import { OwnershipService } from './ownership.service';
 
 @Module({
   imports: [],
-  controllers: [],
+  controllers: [OwnershipController],
   providers: [
     OwnershipProviders,
     OwnershipService
