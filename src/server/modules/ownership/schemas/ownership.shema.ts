@@ -15,5 +15,8 @@ export const OwnershipSchema: Schema = new Schema({
   system: {
     awailable: Boolean
   },
-  grade: [GrageSchema]
+  grade: {
+    type: [GrageSchema],
+    required: true
+  }
 });

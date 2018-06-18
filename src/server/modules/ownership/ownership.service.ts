@@ -4,4 +4,9 @@ import { Model } from 'mongoose';
 import { IOwnership } from './interfaces/ownership.interface';
 
 @Injectable()
-export class OwnershipService {}
+export class OwnershipService {
+
+  private async createOwnershipElement(data: IOwnership) {
+
+  }
+}
