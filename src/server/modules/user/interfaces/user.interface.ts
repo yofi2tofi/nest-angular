@@ -1,12 +1,20 @@
 import { Document } from 'mongoose';
 
+interface Coinpayments {
+  amount: string;
+  txnId: string;
+  address: string;
+  time: Date;
+  status: boolean;
+}
+
 export interface IUser extends Document {
   method: string;
   local: {
     email: string;
     salt: string;
     hashedPassword: string;
-    roleId: number;
+    roleId: string;
   };
   google: {
     id: string;
@@ -28,12 +36,15 @@ export interface IUser extends Document {
     resetUrlCreated?: number;
   };
   refSystem: {
-    refferals: number[],
-    refferer: string
+    refferals: number[];
+    refferer: string;
   };
   balance: {
-    current: number,
-    income: number,
-    outcome: number
+    current: number;
+    income: number;
+    outcome: number;
+  };
+  payments: {
+    coinpayments: Coinpayments[];
   };
 }

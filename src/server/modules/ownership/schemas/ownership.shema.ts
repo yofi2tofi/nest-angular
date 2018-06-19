@@ -1,3 +1,5 @@
+const autoincrement = require('simple-mongoose-autoincrement');
+
 import { Schema } from 'mongoose';
 
 const GrageSchema: Schema = new Schema ({
@@ -19,4 +21,10 @@ export const OwnershipSchema: Schema = new Schema({
     type: [GrageSchema],
     required: true
   }
+});
+
+OwnershipSchema.plugin(autoincrement, {
+  field: 'id',
+  startAt: 0,
+  incrementBy: 1
 });

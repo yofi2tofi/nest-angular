@@ -16,7 +16,7 @@ import { IToken } from './interfaces/token.interface';
 import { IFacebookConfig } from './interfaces/facebook-config.interface';
 import { ITwitterConfig } from './interfaces/twitter-config.interface';
 import { IGoogleConfig } from './interfaces/google-config.interface';
-import { generateSalt, generateHashedPassword, generateHashedResetUrl } from '../../utilities/encryption';
+import { generateSalt, generateHashedPassword, generateHashedResetUrl, generateHashedRoleId } from '../../utilities/encryption';
 import { EmailerService } from '../emailer/emailer.service';
 
 @Injectable()
@@ -36,7 +36,8 @@ export class AuthService {
   async createToken(user: IUser): Promise<IToken> {
     const expiresIn: string = '12h';
     const token: string = sign({
-      sub: user.id
+      sub: user.id,
+      role: user.local.roleId
     }, SERVER_CONFIG.jwtSecret, {expiresIn});
 
     return {

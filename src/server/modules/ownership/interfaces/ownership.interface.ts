@@ -12,6 +12,8 @@ export interface IOwnership extends Document {
   title: string;
   description: string;
   lastHarvest: number;
+  updateAt?: Date;
+  createAt?: Date;
   system: {
     awailable: boolean
   };

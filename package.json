@@ -119,6 +119,8 @@
     "joi": "13.1.2",
     "jsonwebtoken": "8.1.1",
     "mongoose": "4.13.9",
+    "mongoose-auto-increment": "^5.0.1",
+    "mongoose-autoincrement-id": "^1.0.8",
     "nodemailer": "^4.6.6",
     "passport": "0.4.0",
     "passport-facebook-token": "3.3.0",
@@ -131,6 +133,7 @@
     "request": "2.85.0",
     "rxjs": "6.1.0",
     "rxjs-compat": "6.1.0",
+    "simple-mongoose-autoincrement": "^1.2.1",
     "subscriptions-transport-ws": "0.9.9",
     "ws": "5.1.1",
     "zone.js": "0.8.26"

@@ -5,8 +5,8 @@ import { Strategy } from 'passport-local';
 import { Request } from 'express';
 
 import { IUser } from '../../user/interfaces/user.interface';
-import { generateHashedPassword, generateSalt, generateHashedRefUrl } from '../../../utilities/encryption';
-import { MESSAGES, USER_MODEL_TOKEN } from '../../../server.constants';
+import { generateHashedPassword, generateSalt, generateHashedRefUrl, generateHashedRoleId } from '../../../utilities/encryption';
+import { SERVER_CONFIG, MESSAGES, USER_MODEL_TOKEN } from '../../../server.constants';
 
 @Injectable()
 export class LocalStrategy {
@@ -35,7 +35,8 @@ export class LocalStrategy {
           local: {
             email,
             salt,
-            hashedPassword: generateHashedPassword(salt, password)
+            hashedPassword: generateHashedPassword(salt, password),
+            roleId: generateHashedRoleId(SERVER_CONFIG.jwtSecret, '5')
           },
           system: {
             refUrl: generateHashedRefUrl(salt, email)

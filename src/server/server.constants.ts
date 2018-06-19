@@ -6,11 +6,13 @@ export const SERVER_CONFIG: IEnvironmentConfig = Config[env];
 
 export const DB_CONNECTION_TOKEN: string = 'DbConnectionToken';
 export const DB_SESSION_TOKEN: string = 'DbSessionToken';
+export const DB_AUTOINCREMENT_TOKEN: string = 'DbAutoincrementToken';
 export const SERVER_CONFIG_TOKEN: string = 'ServerConfigToken';
 
 export const USER_MODEL_TOKEN: string = 'UserModelToken';
 export const SETTINGS_MODEL_TOKEN: string = 'SettingsModelToken';
 export const OWNERSHIP_MODEL_TOKEN: string = 'OwnershipModelToken';
+export const COINPAYMENTS_MODEL_TOKEN: string = 'CoinpaymentsModelToken';
 
 export const FACEBOOK_CONFIG_TOKEN: string = 'FacebookConfigToken';
 export const TWITTER_CONFIG_TOKEN: string = 'TwitterConfigToken';

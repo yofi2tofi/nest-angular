@@ -1,6 +1,7 @@
-import { IsString, IsInt, IsNotEmpty, IsArray, ArrayNotEmpty, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsInt, IsNotEmpty, IsArray, ArrayNotEmpty, ArrayContains, ValidateNested } from 'class-validator';
 
-class Grage {
+class Grade {
   @IsInt()
   @IsNotEmpty()
   level: number;
@@ -39,9 +40,9 @@ export class OwnershipDto {
   @IsNotEmpty()
   system: any;
 
-  @ValidateNested()
-  @IsNotEmpty()
   @IsArray()
   @ArrayNotEmpty()
-  grade: Grage[];
+  @ValidateNested({ each: true})
+  @Type(type => Grade)
+  grade: Grade[];
 }
