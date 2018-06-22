@@ -18,9 +18,14 @@ const generateHashedResetUrl: (salt: string, id: string) => string = (salt, id) 
   return createHmac('sha256', hmac).update(date).digest('hex');
 };
 
+const generateHashedRoleId: (key: string, roleId: string) => string = (key, roleId) => {
+  return createHmac('sha256', roleId.toString()).update(key).digest('hex');
+};
+
 export {
   generateSalt,
   generateHashedPassword,
   generateHashedRefUrl,
-  generateHashedResetUrl
+  generateHashedResetUrl,
+  generateHashedRoleId
 };

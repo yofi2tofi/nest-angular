@@ -12,5 +12,40 @@ export const SettingsSchema: Schema = new Schema({
   currencies: {
     usd: Number,
     btc: Number
+  },
+  refSystem: {
+    refill: {
+      type: {
+        type: String,
+        enum: ['classic', 'modern'],
+        default: 'classic'
+      },
+      options: {
+        type: Array,
+        default: ['10', '5']
+      }
+    },
+    contribution: {
+      type: {
+        type: String,
+        enum: ['classic', 'modern'],
+        default: 'classic'
+      },
+      options: {
+        type: Array,
+        default: ['10', '5']
+      }
+    },
+    charging: {
+      type: {
+        type: String,
+        enum: ['classic', 'modern'],
+        default: 'classic'
+      },
+      options: {
+        type: Array,
+        default: ['10', '5']
+      }
+    }
   }
 });

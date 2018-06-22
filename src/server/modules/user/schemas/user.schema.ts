@@ -1,5 +1,19 @@
 import { Schema } from 'mongoose';
 
+const Coinpayments: Schema = new Schema({
+  amount: String,
+  txnId: String,
+  address: String,
+  status: {
+    type: Boolean,
+    default: false
+  },
+  time: {
+    type: Date,
+    default: Date.now()
+  }
+});
+
 export const UserSchema: Schema = new Schema({
   method: {
     type: String,
@@ -10,10 +24,7 @@ export const UserSchema: Schema = new Schema({
     email: {type: String, lowercase: true, unique: true, sparse: true},
     salt: String,
     hashedPassword: String,
-    roleId: {
-      type: Number,
-      default: 0
-    }
+    roleId: String
   },
   google: {
     id: String,
@@ -57,5 +68,8 @@ export const UserSchema: Schema = new Schema({
       type: Number,
       default: 0
     }
+  },
+  payments: {
+    coinpayments: [Coinpayments]
   }
 });

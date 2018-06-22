@@ -22,7 +22,7 @@ import { AuthGuard } from './guards/auth.guard';
     UserModule,
     SettingsModule,
     PaymentsModule,
-    // GraphqlModule,
+    OwnershipModule,
     AngularUniversalModule.forRoot()
   ],
   controllers: [],

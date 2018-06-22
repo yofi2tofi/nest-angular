@@ -1,5 +1,7 @@
+const autoIncrement = require('mongoose-auto-increment');
+
 import * as mongoose from 'mongoose';
-import { SERVER_CONFIG, DB_CONNECTION_TOKEN } from '../../server.constants';
+import { SERVER_CONFIG, DB_CONNECTION_TOKEN, DB_AUTOINCREMENT_TOKEN } from '../../server.constants';
 
 export const databaseProviders = [
   {
@@ -11,5 +13,5 @@ export const databaseProviders = [
         useMongoClient: true,
       });
     },
-  },
+  }
 ];
