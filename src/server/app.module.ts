@@ -10,6 +10,7 @@ import { AngularUniversalModule } from './modules/angular-universal/angular-univ
 import { PaymentsModule } from './modules/payments/payments.module';
 import { EmailerModule } from './modules/emailer/emailer.module';
 import { OwnershipModule } from './modules/ownership/ownership.module';
+import { ContributionModule } from './modules/contribution/contribution.module';
 // import { GraphqlModule } from './modules/graphql/graphql.module';
 
 import { AuthGuard } from './guards/auth.guard';
@@ -23,6 +24,7 @@ import { AuthGuard } from './guards/auth.guard';
     SettingsModule,
     PaymentsModule,
     OwnershipModule,
+    ContributionModule,
     AngularUniversalModule.forRoot()
   ],
   controllers: [],

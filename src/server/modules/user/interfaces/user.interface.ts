@@ -44,6 +44,8 @@ export interface IUser extends Document {
     income: number;
     outcome: number;
   };
+  ownerships: any[];
+  сontributions: any[];
   payments: {
     coinpayments: Coinpayments[];
   };

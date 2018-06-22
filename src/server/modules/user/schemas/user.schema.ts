@@ -69,6 +69,11 @@ export const UserSchema: Schema = new Schema({
       default: 0
     }
   },
+  ownerships: Array,
+  сontributions: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ContributionLogs',
+  }],
   payments: {
     coinpayments: [Coinpayments]
   }
