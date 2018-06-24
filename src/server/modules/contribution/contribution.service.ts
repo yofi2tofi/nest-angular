@@ -13,7 +13,7 @@ import { IContributionLog } from './interfaces/contribution.log.interface';
 export class ContributionService {
 
   constructor(
-    @Inject(CONTRIBUTIONLOGS_MODEL_TOKEN) private readonly contributionLogModel: Model<IContributionLog>,
+    @Inject(CONTRIBUTIONLOGS_MODEL_TOKEN) private readonly contributionLogModel: Model<IContributionLog<IContribution>>,
     @Inject(CONTRIBUTION_MODEL_TOKEN) private readonly contributionModel: Model<IContribution>,
     @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>
   ) {}
@@ -96,6 +96,35 @@ export class ContributionService {
     ).exec();
 
     return await this.userModel.findOne({ _id: sub }).populate({ path: 'сontributions', model: 'ContributionLog' }).exec();
+  }
+
+  /**
+   * Закрывает план пользователя, начисляет ресурсы
+   *
+   * @TODO отправлить с модуль почты, оповещать о закрытии плана
+   */
+  public async cronContributionElement(): Promise<any> {
+    const contributionLogs = await this.contributionLogModel.find({
+      isActive: true,
+      closeTime: { $lte: Date.now() }
+    }).populate({ path: 'сontribution', model: 'Contribution' }).exec();
+
+    contributionLogs.forEach( async (elem: IContributionLog<IContribution>) => {
+      const income = elem.foundation / 100 * elem.сontribution.accruals;
+      await this.userModel.update(
+        { сontributions: elem._id},
+        { $inc: {
+          'balance.current': income
+        }}
+      ).exec();
+
+      await this.contributionLogModel.update(
+        { _id: elem._id },
+        { $set: {
+          isActive: false
+        }}
+      ).exec();
+    });
   }
 
   /**
