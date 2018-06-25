@@ -46,7 +46,8 @@ export const UserSchema: Schema = new Schema({
       type: String,
       default: null
     },
-    resetUrlCreated: Number
+    resetUrlCreated: Number,
+    banned: Boolean
   },
   refSystem: {
     refferals: {
@@ -76,5 +77,10 @@ export const UserSchema: Schema = new Schema({
   }],
   payments: {
     coinpayments: [Coinpayments]
-  }
+  },
+  dialogs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dialog'
+  }],
+  banUser: [Schema.Types.ObjectId]
 });

@@ -16,6 +16,7 @@ export const COINPAYMENTS_MODEL_TOKEN: string = 'CoinpaymentsModelToken';
 export const CONTRIBUTION_MODEL_TOKEN: string = 'ContributionModelToken';
 export const CONTRIBUTIONLOGS_MODEL_TOKEN: string = 'ContributionLogsModelToken';
 export const CRONJOB_MODEL_TOKEN: string = 'CronjobModelToken';
+export const DIALOGS_MODEL_TOKEN: string = 'DialogsModelToken';
 
 export const FACEBOOK_CONFIG_TOKEN: string = 'FacebookConfigToken';
 export const TWITTER_CONFIG_TOKEN: string = 'TwitterConfigToken';

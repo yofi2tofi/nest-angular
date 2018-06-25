@@ -22,10 +22,15 @@ const generateHashedRoleId: (key: string, roleId: string) => string = (key, role
   return createHmac('sha256', roleId.toString()).update(key).digest('hex');
 };
 
+const generateDialogHash: (salt: string, id: string) => string = (salt, id) => {
+  return createHmac('sha256', salt).update(id).digest('hex');
+};
+
 export {
   generateSalt,
   generateHashedPassword,
   generateHashedRefUrl,
   generateHashedResetUrl,
-  generateHashedRoleId
+  generateHashedRoleId,
+  generateDialogHash
 };

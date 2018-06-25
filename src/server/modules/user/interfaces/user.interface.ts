@@ -34,6 +34,7 @@ export interface IUser extends Document {
     refUrl: string;
     resetUrl: string;
     resetUrlCreated?: number;
+    banned?: boolean;
   };
   refSystem: {
     refferals: number[];
