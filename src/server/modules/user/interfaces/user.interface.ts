@@ -11,6 +11,7 @@ interface Coinpayments {
 export interface IUser extends Document {
   method: string;
   local: {
+    confirmed: boolean;
     email: string;
     salt: string;
     hashedPassword: string;
@@ -31,6 +32,7 @@ export interface IUser extends Document {
     displayName: string;
   };
   system: {
+    confirmedUrl: string;
     refUrl: string;
     resetUrl: string;
     resetUrlCreated?: number;
@@ -50,4 +52,6 @@ export interface IUser extends Document {
   payments: {
     coinpayments: Coinpayments[];
   };
+  dialogs?: string[];
+  banUser?: string[];
 }

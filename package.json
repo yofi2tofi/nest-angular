@@ -119,6 +119,7 @@
     "helmet": "3.11.0",
     "joi": "13.1.2",
     "jsonwebtoken": "8.1.1",
+    "moment": "^2.22.2",
     "mongoose": "4.13.9",
     "nodemailer": "^4.6.6",
     "passport": "0.4.0",

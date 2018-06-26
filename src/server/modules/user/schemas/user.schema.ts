@@ -21,6 +21,10 @@ export const UserSchema: Schema = new Schema({
     required: true
   },
   local: {
+    confirmed: {
+      type: Boolean,
+      default: false
+    },
     email: {type: String, lowercase: true, unique: true, sparse: true},
     salt: String,
     hashedPassword: String,
@@ -41,6 +45,7 @@ export const UserSchema: Schema = new Schema({
     displayName: String
   },
   system: {
+    confirmedUrl: String,
     refUrl: String,
     resetUrl: {
       type: String,

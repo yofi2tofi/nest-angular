@@ -5,13 +5,20 @@ import { Strategy } from 'passport-local';
 import { Request } from 'express';
 
 import { IUser } from '../../user/interfaces/user.interface';
-import { generateHashedPassword, generateSalt, generateHashedRefUrl, generateHashedRoleId } from '../../../utilities/encryption';
+import {
+  generateHashedPassword,
+  generateSalt,
+  generateHashedRefUrl,
+  generateHashedRoleId,
+  generateConfirmedHash } from '../../../utilities/encryption';
 import { SERVER_CONFIG, MESSAGES, USER_MODEL_TOKEN } from '../../../server.constants';
+import { EmailerService } from '../../emailer/emailer.service';
 
 @Injectable()
 export class LocalStrategy {
   constructor(
-    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>
+    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
+    private readonly emailerService: EmailerService
   ) {
     this.init();
   }
@@ -30,6 +37,7 @@ export class LocalStrategy {
         const refferer: string = req.session.refferer;
 
         const salt: string = generateSalt();
+        const confirmedUrl = generateConfirmedHash(salt, Date.now().toString());
         const user: IUser = new this.userModel({
           method: 'local',
           local: {
@@ -39,12 +47,15 @@ export class LocalStrategy {
             roleId: generateHashedRoleId(SERVER_CONFIG.jwtSecret, '5')
           },
           system: {
+            confirmedUrl,
             refUrl: generateHashedRefUrl(salt, email)
           },
           refSystem: {
             refferer
           }
         });
+
+        this.emailerService.sendCorfimedMail(email, confirmedUrl);
 
         if (refferer) {
           await this.userModel.update(

@@ -1,4 +1,4 @@
-import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { sign } from 'jsonwebtoken';
 import { get, post, Response } from 'request';
@@ -248,6 +248,28 @@ export class AuthService {
     });
   }
 
+  /**
+   * Подтверждает почту пользователя
+   *
+   * @param id
+   */
+  public async confirmMail(id: string): Promise<any> {
+    if (!id) {
+      return new BadRequestException('token invalid');
+    }
+    const user = this.userModel.findOne({ 'system.confirmedUrl': id }).exec();
+    if (user) {
+      return new BadRequestException('token invalid');
+    }
+    return await this.userModel.update(
+      { 'system.confirmedUrl': id },
+      { $set: {
+        'local.confirmed': true,
+        'system.confirmedUrl': null
+      }}
+    ).exec();
+  }
+
   async getResetUrl(email: string): Promise<any> {
     const user: IUser = await this.userModel.findOne({ 'local.email': email });
 
@@ -269,7 +291,7 @@ export class AuthService {
       }
     ).exec();
 
-    // this.emailerService.sendResetMail(email, url);
+    this.emailerService.sendResetMail(email, url);
   }
 
   private parseTwitterResponse(response: string): {[key: string]: string | boolean} {

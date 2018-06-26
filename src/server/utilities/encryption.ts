@@ -26,11 +26,16 @@ const generateDialogHash: (salt: string, id: string) => string = (salt, id) => {
   return createHmac('sha256', salt).update(id).digest('hex');
 };
 
+const generateConfirmedHash: (salt: string, time: string) => string = (salt, time) => {
+  return createHmac('sha256', salt).update(time).digest('hex');
+};
+
 export {
   generateSalt,
   generateHashedPassword,
   generateHashedRefUrl,
   generateHashedResetUrl,
   generateHashedRoleId,
-  generateDialogHash
+  generateDialogHash,
+  generateConfirmedHash
 };
