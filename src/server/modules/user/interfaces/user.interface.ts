@@ -16,6 +16,7 @@ export interface IUser extends Document {
     salt: string;
     hashedPassword: string;
     roleId: string;
+    avatar: string;
   };
   google: {
     id: string;
@@ -37,6 +38,9 @@ export interface IUser extends Document {
     resetUrl: string;
     resetUrlCreated?: number;
     banned?: boolean;
+  };
+  settings: {
+    coinpayments: string
   };
   refSystem: {
     refferals: number[];

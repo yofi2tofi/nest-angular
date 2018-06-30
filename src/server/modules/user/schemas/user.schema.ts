@@ -28,7 +28,8 @@ export const UserSchema: Schema = new Schema({
     email: {type: String, lowercase: true, unique: true, sparse: true},
     salt: String,
     hashedPassword: String,
-    roleId: String
+    roleId: String,
+    avatar: String
   },
   google: {
     id: String,
@@ -53,6 +54,10 @@ export const UserSchema: Schema = new Schema({
     },
     resetUrlCreated: Number,
     banned: Boolean
+  },
+  settings: {
+    coinpayments: String,
+    coinbasesmth: String
   },
   refSystem: {
     refferals: {
