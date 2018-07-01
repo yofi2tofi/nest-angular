@@ -86,7 +86,10 @@ export const UserSchema: Schema = new Schema({
     ref: 'ContributionLogs',
   }],
   payments: {
-    coinpayments: [Coinpayments]
+    coinpayments: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Coinpayments',
+    }]
   },
   dialogs: [{
     type: Schema.Types.ObjectId,

@@ -39,8 +39,10 @@ export class UserService {
     const { sub } = this.validateToken(token) as JWT;
     const self = this;
     for (const key in data) {
-      await update(key);
-    };
+      if (data[key]) {
+        await update(key);
+      }
+    }
     async function update(key: string) {
       const prop = `settings.${key}`;
       const obj: any = {};

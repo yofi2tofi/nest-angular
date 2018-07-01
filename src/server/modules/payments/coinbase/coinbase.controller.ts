@@ -1,25 +1,25 @@
 import { Controller, Get, Query, Res, Req, Session, Next, UseGuards, Inject } from '@nestjs/common';
 import { Response, Request, NextFunction } from 'express';
 
-import { CoinpaymentsService } from './coinpayments.service';
+import { CoinbaseService } from './coinbase.service';
 import { AuthGuard } from '../../../guards/auth.guard';
 
 @Controller('api/payment')
 @UseGuards(new AuthGuard())
-export class CoinpaymentsController {
+export class CoinbaseController {
 
   constructor(
-    private readonly coinpayments: CoinpaymentsService
+    private readonly coinbase: CoinbaseService
   ) {}
 
-  @Get('coinpayments')
+  @Get('coinbase')
   async createTransaction(@Req() req: Request) {
     const { headers: { authorization }} = req;
-    await this.coinpayments.createTransaction(authorization as string);
+    await this.coinbase.createTransaction(authorization as string);
   }
 
   @Get('test')
   async closeTransaction() {
-    await this.coinpayments.closeTransaction('CPCG5TSSU328CSPMAVXO8AWUZP');
+    // await this.coinbase.closeTransaction('CPCF01TWXRE4JIKYVDIMFVMLMQ');
   }
 }

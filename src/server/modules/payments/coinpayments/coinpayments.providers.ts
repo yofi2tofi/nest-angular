@@ -1,10 +1,12 @@
 const Coinpayments = require('coinpayments');
 import { Connection } from 'mongoose';
 
-import { COINPAYMENTS_MODEL_TOKEN, DB_CONNECTION_TOKEN } from '../../../server.constants';
+import {
+  COINPAYMENTS_MODEL_TOKEN,
+  COINPAYMENTS_PAYMENT_TOKEN,
+  DB_CONNECTION_TOKEN } from '../../../server.constants';
 
 import { coinpaymentsConfig } from './config/coinpayments.config';
-import { COINPAYMENTS_PAYMENT_TOKEN } from '../../../server.constants';
 import { CoinpaymentsSchema } from './schema/coinpayments.schema';
 
 export const CoinpaymentsProviders = [

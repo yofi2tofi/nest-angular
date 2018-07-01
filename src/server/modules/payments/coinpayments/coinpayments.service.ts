@@ -1,3 +1,5 @@
+const Coinpayments = require('coinpayments');
+
 import { Injectable, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { verify } from 'jsonwebtoken';
@@ -5,8 +7,8 @@ import { verify } from 'jsonwebtoken';
 import {
   SERVER_CONFIG,
   COINPAYMENTS_PAYMENT_TOKEN,
-  SETTINGS_MODEL_TOKEN,
   COINPAYMENTS_MODEL_TOKEN,
+  SETTINGS_MODEL_TOKEN,
   USER_MODEL_TOKEN } from '../../../server.constants';
 import { ITransactionConfig } from './interfaces/transaction.interface';
 import { ICoinpayments } from './interfaces/coinpayments.log.interface';
@@ -15,7 +17,6 @@ import { ISettings } from '../../settings/interfaces/settings.interface';
 import { IUser } from '../../user/interfaces/user.interface';
 import { JWT } from '../../../modules/auth/interfaces/jwtToken.interface';
 import { IToken } from '../../../modules/auth/interfaces/token.interface';
-import { timesSeries } from 'async';
 
 @Injectable()
 export class CoinpaymentsService {
@@ -24,7 +25,20 @@ export class CoinpaymentsService {
     @Inject(COINPAYMENTS_MODEL_TOKEN) private readonly coinpaymentsModel: Model<ICoinpayments>,
     @Inject(SETTINGS_MODEL_TOKEN) private readonly settingModel: Model<ISettings>,
     @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>
-  ) {}
+  ) {
+    this.initListening();
+  }
+
+  private async initListening() {
+    const transactions = await this.coinpaymentsModel.find({ status: false }).distinct('txnId').exec();
+    this.coinpayments.getTxMulti(transactions, (err: any, response: any) => {
+      for (const key in response) {
+        if (response[key].status === 100) {
+          this.closeTransaction(key);
+        }
+      }
+    });
+  }
 
   async createTransaction(token: string): Promise<any> {
     const { sub } = this.validateToken(token) as JWT;
@@ -36,12 +50,12 @@ export class CoinpaymentsService {
     };
 
     this.coinpayments.createTransaction(option, async (err: any, result: any) => {
-      console.log(err, result);
+
       if (err) {
         return false;
       }
 
-      await new this.coinpaymentsModel({
+      const transaction = await new this.coinpaymentsModel({
         amount: result.amount,
         txnId: result.txn_id,
         address: result.address,
@@ -51,12 +65,7 @@ export class CoinpaymentsService {
       await this.userModel.update(
         { _id : sub },
         { $push: {
-          'payments.coinpayments': {
-            amount: result.amount,
-            txnId: result.txn_id,
-            address: result.address,
-            time: Date.now()
-          }
+          'payments.coinpayments': transaction
         }}
       ).exec();
     });
@@ -73,35 +82,13 @@ export class CoinpaymentsService {
     try {
       const { _id, userId } = await this.coinpaymentsModel.findOne({ txnId });
       const user = await this.userModel.findOne({ _id: userId });
-      const transactions = await this.userModel.aggregate([
-            { $match: {
-              'payments.coinpayments.txnId': txnId }
-            }, {
-              $project: {
-                coinpayments: {
-                  $filter: {
-                    input: '$payments.coinpayments',
-                    as: 'item',
-                    cond: { $eq: [ '$$item.txnId', txnId ]}
-                  }
-                }
-              }
-            }
-          ]);
-      const { coinpayments }: any = transactions.reduce((a, b) => Object.assign({}, a, b), {});
-      const coinpayment: any = coinpayments.reduce((a: any, b: any) => Object.assign({}, a, b), {});
 
       await this.coinpaymentsModel.update(
         { _id },
         { $set: { status: true }}
       ).exec();
 
-      await this.userModel.update(
-        { 'payments.coinpayments._id': coinpayment._id },
-        { $set: {
-          'payments.coinpayments.$.status': true
-        }}
-      ).exec();
+      const coinpayment = await this.coinpaymentsModel.findOne({ _id }).exec();
 
       await this.userModel.update(
         { _id: userId },
