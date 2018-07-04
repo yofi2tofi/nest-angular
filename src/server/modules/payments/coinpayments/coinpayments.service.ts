@@ -18,13 +18,16 @@ import { IUser } from '../../user/interfaces/user.interface';
 import { JWT } from '../../../modules/auth/interfaces/jwtToken.interface';
 import { IToken } from '../../../modules/auth/interfaces/token.interface';
 
+import { LoggerService } from '../../logger/logger.service';
+
 @Injectable()
 export class CoinpaymentsService {
   constructor(
     @Inject(COINPAYMENTS_PAYMENT_TOKEN) private readonly coinpayments: any,
     @Inject(COINPAYMENTS_MODEL_TOKEN) private readonly coinpaymentsModel: Model<ICoinpayments>,
     @Inject(SETTINGS_MODEL_TOKEN) private readonly settingModel: Model<ISettings>,
-    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>
+    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
+    private readonly loggerService: LoggerService
   ) {
     this.initListening();
   }
@@ -62,6 +65,8 @@ export class CoinpaymentsService {
         userId: sub,
       }).save();
 
+      this.loggerService.logTransaction(sub);
+
       await this.userModel.update(
         { _id : sub },
         { $push: {
@@ -98,6 +103,8 @@ export class CoinpaymentsService {
         }}
       ).exec();
 
+      await this.loggerService.logIncomeFund(userId, coinpayment.amount);
+
       if (refill.type === 'classic') {
         await this.giveRefFeeClassic(refill.options, userId, coinpayment.amount);
       }
@@ -122,6 +129,7 @@ export class CoinpaymentsService {
   private async giveRefFeeClassic(options: string[], userId: string, amount: string): Promise<any> {
     let counter = 0;
     const userModel = this.userModel;
+    const loggerService = this.loggerService;
 
     async function work() {
       const user = await userModel.findOne({ _id : userId });
@@ -132,6 +140,8 @@ export class CoinpaymentsService {
 
         const procent = options[counter];
         const fee = +amount / 100 * +procent;
+
+        await loggerService.logIncomeRef(userId, fee, user.local.email);
 
         await userModel.update(
           { _id: userId },

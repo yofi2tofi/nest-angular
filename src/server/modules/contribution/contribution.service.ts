@@ -9,13 +9,16 @@ import { JWT } from '../../modules/auth/interfaces/jwtToken.interface';
 import { IContribution } from './interfaces/contribution.interface';
 import { IContributionLog } from './interfaces/contribution.log.interface';
 
+import { LoggerService } from '../logger/logger.service';
+
 @Injectable()
 export class ContributionService {
 
   constructor(
     @Inject(CONTRIBUTIONLOGS_MODEL_TOKEN) private readonly contributionLogModel: Model<IContributionLog<IContribution>>,
     @Inject(CONTRIBUTION_MODEL_TOKEN) private readonly contributionModel: Model<IContribution>,
-    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>
+    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
+    private readonly loggerService: LoggerService
   ) {}
 
   /**
@@ -72,6 +75,7 @@ export class ContributionService {
       max: { $gte: value }
     });
     const user = await this.userModel.findOne({ _id: sub });
+
     if (user.balance.current <= value) {
       return new BadRequestException('Not have much resource');
     }
@@ -83,6 +87,8 @@ export class ContributionService {
       closeTime: Date.now() + contribution.duration,
       isActive: true
     }).save();
+
+    await this.loggerService.logContributionOpen(sub);
 
     await this.userModel.update(
       { _id: sub },
@@ -117,6 +123,10 @@ export class ContributionService {
           'balance.current': income
         }}
       ).exec();
+
+      const user = this.userModel.findOne({ сontributions: elem._id }).exec();
+
+      await this.loggerService.logContributionIncome(user._id, income);
 
       await this.contributionLogModel.update(
         { _id: elem._id },

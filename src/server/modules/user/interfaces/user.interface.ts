@@ -9,6 +9,7 @@ interface Coinpayments {
 }
 
 export interface IUser extends Document {
+  _id: string;
   method: string;
   local: {
     confirmed: boolean;

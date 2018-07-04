@@ -15,6 +15,7 @@ import { GoogleStrategy } from './passport/google-plus.strategy';
 
 import { UserModule } from '../user/user.module';
 import { EmailerModule } from '../emailer/emailer.module';
+import { LoggerModule } from '../logger/logger.module';
 
 import { authProviders } from './auth.providers';
 import { AuthService } from './auth.service';
@@ -24,7 +25,8 @@ import { bodyValidatorMiddleware } from './middlewares/body-validator.middleware
 @Module({
   imports: [
     UserModule,
-    EmailerModule
+    EmailerModule,
+    LoggerModule
   ],
   providers: [
     ...authProviders,

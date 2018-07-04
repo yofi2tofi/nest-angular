@@ -20,6 +20,6 @@ export class CoinpaymentsController {
 
   @Get('test')
   async closeTransaction() {
-    await this.coinpayments.closeTransaction('CPCG5TSSU328CSPMAVXO8AWUZP');
+    await this.coinpayments.closeTransaction('CPCG7QCG1FO73QIWPZX7RXWYT6');
   }
 }

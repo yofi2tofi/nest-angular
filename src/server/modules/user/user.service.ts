@@ -7,10 +7,13 @@ import { IUser } from './interfaces/user.interface';
 import { JWT } from '../../modules/auth/interfaces/jwtToken.interface';
 import { ISettingsDto } from './interfaces/settings.interface';
 
+import { LoggerService } from '../logger/logger.service';
+
 @Injectable()
 export class UserService {
   constructor(
     @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
+    private readonly loggerService: LoggerService
   ) {}
 
   /**
@@ -26,6 +29,7 @@ export class UserService {
         'local.avatar': file.path
       }}
     );
+    await this.loggerService.logAvatar(sub);
     return file.path;
   }
 
@@ -43,6 +47,9 @@ export class UserService {
         await update(key);
       }
     }
+
+    await this.loggerService.logChangeSettings(sub);
+
     async function update(key: string) {
       const prop = `settings.${key}`;
       const obj: any = {};

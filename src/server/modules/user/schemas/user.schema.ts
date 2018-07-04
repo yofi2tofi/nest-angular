@@ -1,19 +1,5 @@
 import { Schema } from 'mongoose';
 
-const Coinpayments: Schema = new Schema({
-  amount: String,
-  txnId: String,
-  address: String,
-  status: {
-    type: Boolean,
-    default: false
-  },
-  time: {
-    type: Date,
-    default: Date.now()
-  }
-});
-
 export const UserSchema: Schema = new Schema({
   method: {
     type: String,
@@ -80,7 +66,20 @@ export const UserSchema: Schema = new Schema({
       default: 0
     }
   },
-  ownerships: Array,
+  ownerships: [{
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Ownership'
+    },
+    count: {
+      type: Number,
+      default: 1
+    },
+    lastHarvest: {
+      type: Number,
+      default: +Date.now()
+    }
+  }],
   сontributions: [{
     type: Schema.Types.ObjectId,
     ref: 'ContributionLogs',

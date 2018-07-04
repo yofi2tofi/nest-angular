@@ -7,12 +7,15 @@ import { IOwnership } from './interfaces/ownership.interface';
 import { IUser } from '../user/interfaces/user.interface';
 import { JWT } from '../../modules/auth/interfaces/jwtToken.interface';
 
+import { LoggerService } from '../logger/logger.service';
+
 @Injectable()
 export class OwnershipService {
 
   constructor(
     @Inject(OWNERSHIP_MODEL_TOKEN) private readonly ownershipModel: Model<IOwnership>,
-    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>
+    @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
+    private readonly loggerService: LoggerService
   ) {}
 
   /**
@@ -57,44 +60,39 @@ export class OwnershipService {
     const { sub } = this.validateToken(token) as JWT;
     const ownerships = await this.ownershipModel.findOne({ id });
     const user = await this.userModel.findOne({ _id: sub });
-    if (!ownerships){
+    if (!ownerships) {
       return false;
     }
-    if (ownerships.price > user.balance.current) {
-      // return { message: 'Not enough money' };
-    }
+    // if (ownerships.price > user.balance.current) {
+    //   return { message: 'Not enough money' };
+    // }
 
     const ownership = await this.userModel.findOne({
       '_id': user._id,
-      'ownerships.id': id
-    });
+      'ownerships._id': ownerships._id
+    }, 'ownerships')
+    .exec();
+
     try {
       if (!ownership) {
-        ownerships.lastHarvest = Date.now();
+        await this.loggerService.logOwnershipPurchase(user._id, ownerships.title);
+
         await this.userModel.update(
           { _id: sub },
           { $push: {
-            ownerships
+            ownerships: {
+              _id: ownerships._id
+            }
           }}
-        );
+        ).exec();
       } else {
-        const properties = await this.userModel.aggregate([
-          { $match: {
-            '_id': user._id,
-            'ownerships.id': id }
-          }, { $project: {
-              ownerships: {
-                $filter: {
-                  input: '$ownerships',
-                  as: 'item',
-                  cond: { $eq: [ '$$item.id', id ]}
-                }
-              }
-          }}
-        ]);
+        const { count, lastHarvest } = ownership.ownerships.filter((elem: IOwnership) => {
+          if (elem._id.toString() === ownerships._id.toString()) {
+            return elem;
+          }
+        }).reduce((prev, key) => key, {});
 
-        const property: any = properties.reduce((a, b) => Object.assign({}, a, b), {});
-        const { gainPerHour, lastHarvest, _id }: any = property.ownerships.reduce((a: any, b: any) => Object.assign({}, a, b), {});
+        const { gainPerHour } = ownerships;
 
         const now = Date.now(),
               pointPerMinute = gainPerHour / 60;
@@ -109,19 +107,29 @@ export class OwnershipService {
               'balance.current': user.balance.current + plenty
             }}
           ).exec();
+
+          const data = {
+            income: plenty,
+            name: ownerships.title
+          };
+
+          await this.loggerService.logOwnershipIncome(user._id, data);
         }
+
+        await this.loggerService.logOwnershipPurchase(user._id, ownerships.title);
 
         await this.userModel.update(
           { '_id': user._id,
-            'ownerships.id': id
+            'ownerships._id': ownerships._id
           }, { $inc: {
             'ownerships.$.count': 1
           }, $set: {
-            'ownerships.$.lastHarvest': Date.now()
+            'ownerships.$.lastHarvest': +Date.now()
           }}
         );
       }
     } catch (error) {
+      console.log(error);
       return false;
     }
   }

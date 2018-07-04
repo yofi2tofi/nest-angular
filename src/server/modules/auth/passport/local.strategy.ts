@@ -13,11 +13,13 @@ import {
   generateConfirmedHash } from '../../../utilities/encryption';
 import { SERVER_CONFIG, MESSAGES, USER_MODEL_TOKEN } from '../../../server.constants';
 import { EmailerService } from '../../emailer/emailer.service';
+import { LoggerService } from '../../logger/logger.service';
 
 @Injectable()
 export class LocalStrategy {
   constructor(
     @Inject(USER_MODEL_TOKEN) private readonly userModel: Model<IUser>,
+    private readonly loggerService: LoggerService,
     private readonly emailerService: EmailerService
   ) {
     this.init();
@@ -66,6 +68,8 @@ export class LocalStrategy {
           ).exec();
         }
 
+        await this.loggerService.logRegistration(user._id);
+
         await user.save();
 
         done(null, user);
@@ -112,6 +116,8 @@ export class LocalStrategy {
           return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
         }
 
+        await this.loggerService.logChangePass(user._id);
+
         await this.userModel.update(
           { _id: user._id },
           { $set: { 'local.hashedPassword': generateHashedPassword(user.local.salt, password) }}
@@ -137,6 +143,8 @@ export class LocalStrategy {
         if (user.system.resetUrlCreated > (+new Date() + 1000 * 60 * 60) ) {
           return done(new RequestTimeoutException(MESSAGES.LIFETIME_LINK_OUT), false);
         }
+
+        await this.loggerService.logResetPass(user._id);
 
         const salt: string = generateSalt();
         await this.userModel.update(

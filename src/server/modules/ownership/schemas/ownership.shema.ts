@@ -13,7 +13,6 @@ import { Schema } from 'mongoose';
 export const OwnershipSchema: Schema = new Schema({
   title: String,
   description: String,
-  lastHarvest: Number,
   system: {
     awailable: Boolean
   },

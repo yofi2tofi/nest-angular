@@ -18,6 +18,7 @@ import { ITwitterConfig } from './interfaces/twitter-config.interface';
 import { IGoogleConfig } from './interfaces/google-config.interface';
 import { generateSalt, generateHashedPassword, generateHashedResetUrl, generateHashedRoleId } from '../../utilities/encryption';
 import { EmailerService } from '../emailer/emailer.service';
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     @Inject(FACEBOOK_CONFIG_TOKEN) private readonly fbConfig: IFacebookConfig,
     @Inject(TWITTER_CONFIG_TOKEN) private readonly twitterConfig: ITwitterConfig,
     @Inject(GOOGLE_CONFIG_TOKEN) private readonly googleConfig: IGoogleConfig,
+    private readonly loggerService: LoggerService,
     private readonly emailerService: EmailerService
   ) {
     this.url = `${SERVER_CONFIG.httpProtocol}://${SERVER_CONFIG.domain}:${SERVER_CONFIG.httpPort}`;
@@ -39,6 +41,8 @@ export class AuthService {
       sub: user.id,
       role: user.local.roleId
     }, SERVER_CONFIG.jwtSecret, {expiresIn});
+
+    await this.loggerService.logAuth(user.id);
 
     return {
       token
@@ -261,6 +265,9 @@ export class AuthService {
     if (user) {
       return new BadRequestException('token invalid');
     }
+
+    await this.loggerService.logConfirmEmail(user._id);
+
     return await this.userModel.update(
       { 'system.confirmedUrl': id },
       { $set: {
