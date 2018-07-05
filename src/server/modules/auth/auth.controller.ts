@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Param, Get, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 
 import { AuthService } from './auth.service';
@@ -7,6 +7,11 @@ import { IToken } from './interfaces/token.interface';
 @Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('confirm/:id')
+  async confirmMail(@Param('id') id: string, @Req() req: Request) {
+    return await this.authService.confirmMail(id);
+  }
 
   @Post('local/signup')
   async requestJsonWebTokenAfterLocalSignUp(@Req() req: Request): Promise<IToken> {

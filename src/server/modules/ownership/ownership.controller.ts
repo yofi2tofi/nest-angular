@@ -1,5 +1,6 @@
 import {
   Controller,
+  Req,
   Get,
   Post,
   Put,
@@ -44,5 +45,11 @@ export class OwnershipController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async updateOwnershipElement(@Param('id', new ParseIntPipe()) id: number, @Body() OwnershipDto: OwnershipDto ) {
     return await this.ownershipService.updateOwnershipElement(id, OwnershipDto as IOwnership);
+  }
+
+  @Post(':id')
+  async purchaiseOwnershipElement(@Param('id', new ParseIntPipe()) id: number, @Req() req: Request) {
+    const { headers: { authorization }} = req;
+    return await this.ownershipService.purchaiseOwnershipElement(id, authorization as string);
   }
 }

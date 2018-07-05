@@ -1,12 +1,12 @@
 import { Document } from 'mongoose';
 
-interface Grage extends Document {
-  level: number;
-  point: number;
-  count: number;
-  price: number;
-  gainPerHour: number;
-}
+// interface Grage extends Document {
+//   level: number;
+//   point: number;
+//   count: number;
+//   price: number;
+//   gainPerHour: number;
+// }
 
 export interface IOwnership extends Document {
   title: string;
@@ -17,5 +17,9 @@ export interface IOwnership extends Document {
   system: {
     awailable: boolean
   };
-  grade: Grage[];
+  level: number;
+  point: number;
+  count: number;
+  price: number;
+  gainPerHour: number;
 }

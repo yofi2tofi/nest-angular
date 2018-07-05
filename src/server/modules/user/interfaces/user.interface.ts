@@ -9,12 +9,15 @@ interface Coinpayments {
 }
 
 export interface IUser extends Document {
+  _id: string;
   method: string;
   local: {
+    confirmed: boolean;
     email: string;
     salt: string;
     hashedPassword: string;
     roleId: string;
+    avatar: string;
   };
   google: {
     id: string;
@@ -31,9 +34,14 @@ export interface IUser extends Document {
     displayName: string;
   };
   system: {
+    confirmedUrl: string;
     refUrl: string;
     resetUrl: string;
     resetUrlCreated?: number;
+    banned?: boolean;
+  };
+  settings: {
+    coinpayments: string
   };
   refSystem: {
     refferals: number[];
@@ -44,7 +52,11 @@ export interface IUser extends Document {
     income: number;
     outcome: number;
   };
+  ownerships: any[];
+  сontributions: any[];
   payments: {
     coinpayments: Coinpayments[];
   };
+  dialogs?: string[];
+  banUser?: string[];
 }

@@ -1,27 +1,28 @@
 import { Type } from 'class-transformer';
-import { IsString, IsInt, IsNotEmpty, IsArray, ArrayNotEmpty, ArrayContains, ValidateNested } from 'class-validator';
+import { IsString, IsInt, Min, Equals, IsNotEmpty, IsArray, ArrayNotEmpty, ArrayContains, ValidateNested } from 'class-validator';
 
-class Grade {
-  @IsInt()
-  @IsNotEmpty()
-  level: number;
+// class Grade {
+//   @IsInt()
+//   @Min(1)
+//   @IsNotEmpty()
+//   level: number;
 
-  @IsInt()
-  @IsNotEmpty()
-  point: number;
+//   @IsInt()
+//   @IsNotEmpty()
+//   point: number;
 
-  @IsInt()
-  @IsNotEmpty()
-  count: number;
+//   @IsInt()
+//   @IsNotEmpty()
+//   count: number;
 
-  @IsInt()
-  @IsNotEmpty()
-  price: number;
+//   @IsInt()
+//   @IsNotEmpty()
+//   price: number;
 
-  @IsInt()
-  @IsNotEmpty()
-  gainPerHour: number;
-}
+//   @IsInt()
+//   @IsNotEmpty()
+//   gainPerHour: number;
+// }
 
 export class OwnershipDto {
   @IsString()
@@ -40,9 +41,31 @@ export class OwnershipDto {
   @IsNotEmpty()
   system: any;
 
-  @IsArray()
-  @ArrayNotEmpty()
-  @ValidateNested({ each: true})
-  @Type(type => Grade)
-  grade: Grade[];
+  // @IsArray()
+  // @ArrayNotEmpty()
+  // @ValidateNested({ each: true})
+  // @Type(type => Grade)
+  // grade: Grade[];
+
+  @IsInt()
+  @Min(1)
+  @IsNotEmpty()
+  level: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  point: number;
+
+  @IsInt()
+  @Equals(0)
+  @IsNotEmpty()
+  count: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  price: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  gainPerHour: number;
 }

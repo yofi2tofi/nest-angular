@@ -1,19 +1,5 @@
 import { Schema } from 'mongoose';
 
-const Coinpayments: Schema = new Schema({
-  amount: String,
-  txnId: String,
-  address: String,
-  status: {
-    type: Boolean,
-    default: false
-  },
-  time: {
-    type: Date,
-    default: Date.now()
-  }
-});
-
 export const UserSchema: Schema = new Schema({
   method: {
     type: String,
@@ -21,10 +7,15 @@ export const UserSchema: Schema = new Schema({
     required: true
   },
   local: {
+    confirmed: {
+      type: Boolean,
+      default: false
+    },
     email: {type: String, lowercase: true, unique: true, sparse: true},
     salt: String,
     hashedPassword: String,
-    roleId: String
+    roleId: String,
+    avatar: String
   },
   google: {
     id: String,
@@ -41,12 +32,18 @@ export const UserSchema: Schema = new Schema({
     displayName: String
   },
   system: {
+    confirmedUrl: String,
     refUrl: String,
     resetUrl: {
       type: String,
       default: null
     },
-    resetUrlCreated: Number
+    resetUrlCreated: Number,
+    banned: Boolean
+  },
+  settings: {
+    coinpayments: String,
+    coinbasesmth: String
   },
   refSystem: {
     refferals: {
@@ -69,7 +66,33 @@ export const UserSchema: Schema = new Schema({
       default: 0
     }
   },
+  ownerships: [{
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Ownership'
+    },
+    count: {
+      type: Number,
+      default: 1
+    },
+    lastHarvest: {
+      type: Number,
+      default: +Date.now()
+    }
+  }],
+  сontributions: [{
+    type: Schema.Types.ObjectId,
+    ref: 'ContributionLogs',
+  }],
   payments: {
-    coinpayments: [Coinpayments]
-  }
+    coinpayments: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Coinpayments',
+    }]
+  },
+  dialogs: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dialog'
+  }],
+  banUser: [Schema.Types.ObjectId]
 });

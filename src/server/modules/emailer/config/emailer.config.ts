@@ -4,7 +4,7 @@ export const nodemailerConfig: INodeMailer = {
   service: 'gmail',
   host: 'smtp.gmail.com',
   auth: {
-      user: '',
+      user: '@gmail.com',
       pass: ''
   }
 };
