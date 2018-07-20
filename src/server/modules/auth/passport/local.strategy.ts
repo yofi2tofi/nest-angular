@@ -99,6 +99,31 @@ export class LocalStrategy {
       }
     }));
 
+    use('local-signin-admin', new Strategy({
+      usernameField: 'email',
+      passwordField: 'password'
+    }, async (email: string, password: string, done: Function) => {
+      try {
+        const user: IUser = await this.userModel.findOne({ 'local.email': email });
+
+        if (!user) {
+          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_EMAIL), false);
+        }
+
+        if (generateHashedPassword(user.local.salt, password) !== user.local.hashedPassword) {
+          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_PASSWORD), false);
+        }
+
+        if (user.local.roleId !== '84dc16579d240f675add648c124f9dc6dac348cf8086712d49fafe80555455f5') {
+          return done(new UnauthorizedException(MESSAGES.UNAUTHORIZED_INVALID_EMAIL), false);
+        }
+
+        done(null, user);
+      } catch (error) {
+        done(error, false);
+      }
+    }));
+
     use('local-change', new Strategy({
       usernameField: 'email',
       passwordField: 'password',

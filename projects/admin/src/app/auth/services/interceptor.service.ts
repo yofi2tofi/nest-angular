@@ -12,19 +12,22 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class IntercepterService implements HttpInterceptor {
-  public authService;
+
+  public authService: any;
 
   constructor(
     private injector: Injector
   ) {}
 
   addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
-    return req.clone({ setHeaders: { Authorization: token }});
+    return req.clone({ setHeaders: { Authorization: token ? 'Bearer ' + token : '' }});
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.authService = this.injector.get(AuthService);
-    return next.handle(this.addToken(request, this.authService.getToken()))
+    return next.handle(
+          this.addToken(request, this.authService.getToken())
+        )
         .do((event: HttpEvent<any>) => {
           if (event instanceof HttpResponse && event.headers.get('token')) {
             this.authService.setToken(event.headers.get('token'));

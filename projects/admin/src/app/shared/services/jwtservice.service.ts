@@ -10,7 +10,7 @@ export class JwtserviceService {
   constructor(private authService: AuthService) {}
 
   public getPayload(): any {
-    const decoded = jwt_decode(this.authService.getToken());
-    return decoded.data;
+    const decoded: any = jwt_decode(this.authService.getToken());
+    return decoded;
   }
 }

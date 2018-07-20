@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.admin.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "module": "commonjs",
     "types": [
       "jasmine",

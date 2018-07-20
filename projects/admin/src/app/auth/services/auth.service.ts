@@ -21,15 +21,15 @@ export class AuthService {
     this.host = environment.api;
   }
 
-  // public auth(formData: Autorization): Observable<AutorizationResponce> {
-  //   return this.http.post<AutorizationResponce>([this._host, AUTH].join(''), JSON.stringify(formData), httpOptions);
-  // }
+  public auth(data: any): Observable<any> {
+    return this.http.post([AUTH].join(''), data, httpOptions);
+  }
 
   // public confirm(formData: Confirm): Observable<ConfirmResponce> {
   //   return this.http.post<ConfirmResponce>([this._host, CONFIRM].join(''), JSON.stringify(formData), httpOptions);
   // }
 
-  public getToken(): string | boolean {
+  public getToken(): string | null {
     return localStorage.getItem('token');
   }
 
@@ -42,7 +42,7 @@ export class AuthService {
     this.router.navigateByUrl('authorization');
   }
 
-  public setToken(token): void {
+  public setToken(token: any): void {
     localStorage.setItem('token', token);
   }
 }

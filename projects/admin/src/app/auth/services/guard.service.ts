@@ -14,7 +14,12 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    this.auth.logout();
-    return false;
+    if (!this.auth.getToken()) {
+      this.auth.logout();
+      return false;
+    }
+
+    console.log(this.jwt.getPayload());
+    return true;
   }
 }
