@@ -14,6 +14,7 @@ import { Request } from 'express';
 import { UploadConfig } from './config/file.config';
 import { UserService } from './user.service';
 import { AuthGuard } from '../../guards/auth.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 import { SettingsDto } from './dto/settings.dto';
 import { ISettingsDto } from './interfaces/settings.interface';
 
@@ -23,6 +24,12 @@ export class UserController {
   constructor(
     private readonly userService: UserService
   ) {}
+
+  @Get()
+  @UseGuards(RolesGuard)
+  async getAllUsers() {
+    return await this.userService.findAll();
+  }
 
   @Post('avatar')
   @UseInterceptors(FileInterceptor('file', UploadConfig))

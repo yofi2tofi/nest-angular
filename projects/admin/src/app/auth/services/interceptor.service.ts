@@ -20,7 +20,7 @@ export class IntercepterService implements HttpInterceptor {
   ) {}
 
   addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
-    return req.clone({ setHeaders: { Authorization: token ? 'Bearer ' + token : '' }});
+    return req.clone({ setHeaders: { Authorization: token ? token : '' }});
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -34,7 +34,7 @@ export class IntercepterService implements HttpInterceptor {
           }
         }, (err: any) => {
           if (err instanceof HttpErrorResponse) {
-            if (err.status === 401) {
+            if (err.status === 401 || err.status === 403) {
               this.authService.logout();
             } else {
               console.log(err.error);

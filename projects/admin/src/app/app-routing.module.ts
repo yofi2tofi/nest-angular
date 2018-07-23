@@ -5,11 +5,16 @@ import { AuthGuard } from './auth/services/guard.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
+import { LayoutComponent } from './core/layout/layout.component';
 
 const routes: Routes = [{
   path: '',
   component: AppComponent,
-  canActivate: [AuthGuard]
+  canActivate: [AuthGuard],
+  children: [{
+    path: '',
+    component: LayoutComponent
+  }]
 }, {
   path: 'authorization',
   component: LoginComponent

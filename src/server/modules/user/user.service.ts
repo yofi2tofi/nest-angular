@@ -17,6 +17,19 @@ export class UserService {
   ) {}
 
   /**
+   * Получает всех пользователей для админки
+   */
+  public async findAll(): Promise<IUser[]> {
+    return await this.userModel.find()
+      .populate(
+        { path: 'refSystem.refferals', model: 'User' }
+      )
+      .populate(
+        { path: 'ownerships._id', model: 'Ownership' }
+      );
+  }
+
+  /**
    * Сохраняет аватар в базу
    *
    * @param file
