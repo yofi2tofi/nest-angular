@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSort, MatTableDataSource } from '@angular/material';
 import { first } from 'rxjs/operators';
 
@@ -11,13 +12,12 @@ import { UsersService } from '../../shared/services/users.service';
 })
 export class UsersComponent implements OnInit {
 
-  @ViewChild(MatSort) sort: MatSort;
-
   users: MatTableDataSource<any>;
   displayedColumns: string[] = ['email', 'current', 'income', 'outcome'];
 
   constructor(
-    private usersService: UsersService
+    private usersService: UsersService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -34,15 +34,14 @@ export class UsersComponent implements OnInit {
    */
   initDataSource(val: any): void {
     this.users = new MatTableDataSource([...val]);
-    console.log(this.sort);
-    this.users.sortingDataAccessor = (item, property) => {
-      console.log(item, property);
-      switch (property) {
-        case 'project.name': return item.project.name;
-        default: return item[property];
-      }
-    };
-    this.users.sort = this.sort;
   }
 
+  /**
+   * Получение логов пользователя
+   *
+   * @param id
+   */
+  onOpenLogs(id: string): void {
+    this.router.navigate(['/logs', id]);
+  }
 }

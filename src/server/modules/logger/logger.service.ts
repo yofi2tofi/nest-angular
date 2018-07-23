@@ -18,6 +18,13 @@ export class LoggerService {
   ) {}
 
   /**
+   *  Получаем все логи пользователя для админки
+   */
+  public async getAllLogs(id: string): Promise<any> {
+    return await this.loggerModel.findOne({ userId : id }).exec();
+  }
+
+  /**
    * Лог регистрации
    *
    * @param userId

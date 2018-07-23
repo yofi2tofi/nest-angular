@@ -2,6 +2,7 @@ import { Module, Global } from '@nestjs/common';
 
 import { DatabaseModule } from '../database/database.module';
 
+import { LoggerController } from './logger.controller';
 import { LoggerProviders } from './logger.providers';
 import { LoggerService } from './logger.service';
 
@@ -9,7 +10,7 @@ import { LoggerService } from './logger.service';
   imports: [
     DatabaseModule
   ],
-  controllers: [],
+  controllers: [LoggerController],
   providers: [
     ...LoggerProviders,
     LoggerService
