@@ -1,0 +1,16 @@
+:host {
+  width: 100%
+}
+
+::ng-deep {
+  table {
+    width: 100%
+  }
+}
+
+.table {
+
+  &--link {
+    cursor: pointer;
+  }
+}

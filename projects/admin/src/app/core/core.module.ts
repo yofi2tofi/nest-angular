@@ -7,6 +7,8 @@ import { MaterialModule } from '../material/material.module';
 import { LayoutComponent } from './layout/layout.component';
 import { UsersComponent } from './users/users.component';
 import { LogsComponent } from './logs/logs.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { TicketsComponent } from './tickets/tickets.component';
 
 @NgModule({
   imports: [
@@ -14,6 +16,6 @@ import { LogsComponent } from './logs/logs.component';
     MaterialModule,
     RouterModule
   ],
-  declarations: [LayoutComponent, UsersComponent, LogsComponent]
+  declarations: [LayoutComponent, UsersComponent, LogsComponent, TransactionsComponent, TicketsComponent]
 })
 export class CoreModule { }

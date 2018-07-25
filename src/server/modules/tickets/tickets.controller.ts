@@ -16,7 +16,7 @@ export class TicketsController {
     private readonly ticketsService: TicketsService
   ) {}
 
-  @Get()
+  @Get('all')
   @UseGuards(RolesGuard)
   async getAllTickets() {
     return await this.ticketsService.getAllTickets();

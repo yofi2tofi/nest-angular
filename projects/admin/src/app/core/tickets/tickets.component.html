@@ -1,0 +1,29 @@
+<mat-accordion>
+  <ng-template ngFor let-point [ngForOf]="tickets">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ point.messages[0].message.slice(0,100) }}
+
+          {{ point.status }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ point.createAt | date:'dd.MM.yy h:mm:ss a z' }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-list>
+
+        <ng-template ngFor let-message [ngForOf]="point.messages">
+          <h3 mat-subheader>{{ message.owner ? point.userId.local.email: 'admin' }}</h3>
+          <mat-list-item>
+            <p mat-line> {{ message.message }} </p>
+            <p mat-line> {{ message.timestamp | date:'dd.MM.yy h:mm:ss a z' }} </p>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </ng-template>
+
+      </mat-list>
+    </mat-expansion-panel>
+  </ng-template>
+</mat-accordion>

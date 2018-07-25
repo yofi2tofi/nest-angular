@@ -25,6 +25,13 @@
       <td mat-cell *matCellDef="let element"> {{ element.balance.outcome.toFixed(1) }} </td>
     </ng-container>
 
+    <ng-container matColumnDef="btn">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-raised-button color="primary" (click)="onOpenTransactions(element._id)">tr</button>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 

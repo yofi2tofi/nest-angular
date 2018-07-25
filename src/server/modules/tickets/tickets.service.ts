@@ -18,7 +18,11 @@ export class TicketsService {
    * Возвращает все тикеты для админа
    */
   async getAllTickets() {
-    return await this.ticketsModel.find().exec();
+    return await this.ticketsModel.find()
+      .populate(
+        { path: 'userId', model: 'User', select: 'local.email' }
+      )
+      .exec();
   }
 
   /**

@@ -21,6 +21,9 @@ import { CoinpaymentsService } from './coinpayments.service';
     ...CoinpaymentsProviders,
     CoinpaymentsService
   ],
-  exports: []
+  exports: [
+    ...CoinpaymentsProviders,
+    CoinpaymentsService
+  ]
 })
 export class CoinpaymentsModule {}

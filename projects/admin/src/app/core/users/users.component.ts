@@ -13,7 +13,7 @@ import { UsersService } from '../../shared/services/users.service';
 export class UsersComponent implements OnInit {
 
   users: MatTableDataSource<any>;
-  displayedColumns: string[] = ['email', 'current', 'income', 'outcome'];
+  displayedColumns: string[] = ['email', 'current', 'income', 'outcome', 'btn'];
 
   constructor(
     private usersService: UsersService,
@@ -43,5 +43,14 @@ export class UsersComponent implements OnInit {
    */
   onOpenLogs(id: string): void {
     this.router.navigate(['/logs', id]);
+  }
+
+  /**
+   * Получение транзакций пользователя
+   *
+   * @param id
+   */
+  onOpenTransactions(id: string): void {
+    this.router.navigate(['/transactions', id]);
   }
 }

@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import { LOGS } from './api.list';
+import { TRANSACTIONS } from './api.list';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LogsService {
+export class TransactionsService {
   private host: string;
 
   constructor(
@@ -20,7 +20,7 @@ export class LogsService {
   /**
    * Получаем все логи
    */
-  public getAll(id: string): Observable<any> {
-    return this.http.get([LOGS, '/', id].join(''));
+  public getAllTransactions(id: string): Observable<any> {
+    return this.http.get([TRANSACTIONS, '/', id].join(''));
   }
 }

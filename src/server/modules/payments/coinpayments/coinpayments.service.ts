@@ -52,27 +52,31 @@ export class CoinpaymentsService {
       amount: 1
     };
 
-    this.coinpayments.createTransaction(option, async (err: any, result: any) => {
+    return new Promise((resolve: Function, reject: Function) => {
+      this.coinpayments.createTransaction(option, async (err: any, result: any) => {
 
-      if (err) {
-        return false;
-      }
+        if (err) {
+          reject(false);
+        }
 
-      const transaction = await new this.coinpaymentsModel({
-        amount: result.amount,
-        txnId: result.txn_id,
-        address: result.address,
-        userId: sub,
-      }).save();
+        const transaction = await new this.coinpaymentsModel({
+          amount: result.amount,
+          txnId: result.txn_id,
+          address: result.address,
+          userId: sub,
+        }).save();
 
-      this.loggerService.logTransaction(sub);
+        this.loggerService.logTransaction(sub);
 
-      await this.userModel.update(
-        { _id : sub },
-        { $push: {
-          'payments.coinpayments': transaction
-        }}
-      ).exec();
+        await this.userModel.update(
+          { _id : sub },
+          { $push: {
+            'payments.coinpayments': transaction
+          }}
+        ).exec();
+
+        resolve({ status: 'success' });
+      });
     });
   }
 
