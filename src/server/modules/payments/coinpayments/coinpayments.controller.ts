@@ -4,7 +4,7 @@ import { Response, Request, NextFunction } from 'express';
 import { CoinpaymentsService } from './coinpayments.service';
 import { AuthGuard } from '../../../guards/auth.guard';
 
-@Controller('api/payment')
+@Controller('api/payment/coinpayments')
 @UseGuards(new AuthGuard())
 export class CoinpaymentsController {
 
@@ -12,10 +12,10 @@ export class CoinpaymentsController {
     private readonly coinpayments: CoinpaymentsService
   ) {}
 
-  @Get('coinpayments')
+  @Get()
   async createTransaction(@Req() req: Request) {
     const { headers: { authorization }} = req;
-    await this.coinpayments.createTransaction(authorization as string);
+    return await this.coinpayments.createTransaction(authorization as string);
   }
 
   @Get('test')

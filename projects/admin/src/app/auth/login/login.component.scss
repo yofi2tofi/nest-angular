@@ -1,0 +1,15 @@
+.c-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+
+  &__form {
+    padding: 8px;
+  }
+
+  &__btn {
+    width: 100%;
+  }
+}

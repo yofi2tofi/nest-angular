@@ -1,0 +1,27 @@
+.c-layout {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100vw;
+  height: 100vh;
+
+  &__sidebar {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 20%;
+    height: 100vh;
+    padding: 1rem;
+  }
+
+  &__main {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 80%;
+    height: 100vh;
+  }
+}

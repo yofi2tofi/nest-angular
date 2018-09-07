@@ -13,6 +13,10 @@ export const SettingsSchema: Schema = new Schema({
     usd: Number,
     btc: Number
   },
+  tickets: {
+    type: Array,
+    default: ['income', 'withdrow', 'bugs', 'improve']
+  },
   refSystem: {
     refill: {
       type: {

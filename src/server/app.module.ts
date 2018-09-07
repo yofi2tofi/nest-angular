@@ -15,6 +15,7 @@ import { StatisticsModule } from './modules/statistics/statistics.module';
 import { DialogsModule } from './modules/dialogs/dialogs.module';
 import { CronjobModule } from './modules/cronjob/cronjob.module';
 import { LoggerModule } from './modules/logger/logger.module';
+import { TicketsModule } from './modules/tickets/tickets.module';
 // import { GraphqlModule } from './modules/graphql/graphql.module';
 
 import { AuthGuard } from './guards/auth.guard';
@@ -32,6 +33,7 @@ import { AuthGuard } from './guards/auth.guard';
     DialogsModule,
     StatisticsModule,
     CronjobModule,
+    TicketsModule,
     AngularUniversalModule.forRoot()
   ],
   controllers: [],

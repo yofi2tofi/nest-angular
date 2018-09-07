@@ -46,10 +46,10 @@ export const UserSchema: Schema = new Schema({
     coinbasesmth: String
   },
   refSystem: {
-    refferals: {
-      type: Array,
-      default: []
-    },
+    refferals: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }],
     refferer: String
   },
   balance: {

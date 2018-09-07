@@ -59,6 +59,13 @@ export class AuthModule implements NestModule {
     consumer
       .apply([
         bodyValidatorMiddleware,
+        authenticate('local-signin-admin', { session: false })
+      ])
+      .forRoutes('api/auth/local/0958235789sd7fg9as07fas90d8f7');
+
+    consumer
+      .apply([
+        bodyValidatorMiddleware,
         authenticate('local-change', { session: false })
       ])
       .forRoutes('api/auth/local/change-password');
