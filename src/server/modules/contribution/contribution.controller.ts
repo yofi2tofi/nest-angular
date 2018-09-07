@@ -16,12 +16,14 @@ import { Response, Request, NextFunction } from 'express';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RolesGuard } from '../../guards/roles.guard';
 
+import { cryptJSON, decryptJSON } from '../../utilities/hashedJSON';
+
 import { ContributionDto } from './dto/contribution.dto';
 import { IContribution } from './interfaces/contribution.interface';
 import { ContributionService } from './contribution.service';
 
 @Controller('api/contribution')
-@UseGuards(new AuthGuard())
+// @UseGuards(new AuthGuard())
 export class ContributionController {
 
   constructor(
@@ -30,7 +32,10 @@ export class ContributionController {
 
   @Get()
   async findAllContributionPlan() {
-    return await this.contributionService.findAllContributionPlan();
+    const contributions = await this.contributionService.findAllContributionPlan();
+    const contributionsStringified = JSON.stringify(contributions);
+    const data = cryptJSON(contributionsStringified);
+    return data;
   }
 
   @Post()
